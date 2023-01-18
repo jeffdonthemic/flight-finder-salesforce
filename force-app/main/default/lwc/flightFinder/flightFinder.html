@@ -1,0 +1,82 @@
+<template>
+    <lightning-card title="Flight Finder">
+        <div class="slds-box slds-p-around_none slds-m-top_x-small slds-m-bottom_medium slds-m-horizontal_none">
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12" padding="around-small">
+                    <lightning-layout>
+                        <lightning-layout-item>
+                            <lightning-input type="text" label="Enter a destination airport code"
+                            value={destination} 
+                            onchange={handleDestinationChange}> 
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item class="slds-p-top_large slds-p-left_medium">
+                            <lightning-button label="Search" variant="brand" onclick={executeFlightSearch}></lightning-button>
+                        </lightning-layout-item>                        
+                    </lightning-layout>
+                </lightning-layout-item>
+                <lightning-layout-item size="8" padding="around-small">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="" scope="col">
+                                    <div class="slds-truncate">Flight</div>
+                                </th>                        
+                                <th class="" scope="col">
+                                    <div class="slds-truncate">Airline</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate">Destination</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate">Departure</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={flights} for:item="flight">
+                            <tr class="slds-hint-parent" key={flight.code}>
+                                <td>
+                                    <div class="slds-truncate"><a href="#" onclick={executeGetByCode} id={flight.code}>{flight.flightNumber}</a></div>
+                                </td>                            
+                                <td>
+                                    <div class="slds-truncate">{flight.airlineName}</div>
+                                </td>                    
+                                <td>
+                                    <div class="slds-truncate">{flight.destination}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{flight.departureDate}</div>
+                                </td>
+                            </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <template if:true={flight}>
+                        <div><b>Flight Details</b></div>
+                        <dl class="slds-list_horizontal slds-wrap">
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Airline:</dt>
+                            <dd class="slds-item_detail slds-truncate">{flight.airlineName}</dd>
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Flight Number:</dt>
+                            <dd class="slds-item_detail slds-truncate">{flight.flightNumber}</dd>
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Departure Date:</dt>
+                            <dd class="slds-item_detail slds-truncate">{flight.departureDate}</dd>                               
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Destination:</dt>
+                            <dd class="slds-item_detail slds-truncate">{flight.destination}</dd>
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Origin:</dt>
+                            <dd class="slds-item_detail slds-truncate">{flight.origin}</dd> 
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Price:</dt>
+                            <dd class="slds-item_detail slds-truncate">${flight.price}</dd>
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Available Seats:</dt>
+                            <dd class="slds-item_detail slds-truncate">{flight.emptySeats}</dd>                            
+                            <dt class="slds-item_label slds-text-color_weak slds-truncate">Plane Type:</dt>
+                            <dd class="slds-item_detail slds-truncate">{flight.planeType}</dd>                                                                                                              
+                            </dl>
+                    </template>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </lightning-card>
+</template>
