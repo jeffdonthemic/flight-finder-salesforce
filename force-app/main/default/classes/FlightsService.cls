@@ -1,54 +1,20 @@
 public class FlightsService {
+    private static final String ENDPOINT = 'https://flight-finder-api-044ch3.5sc6y6-2.usa-e2.cloudhub.io/flights';
+
     public static List<Flight> search(String destination) {
         List<Flight> flights = new List<Flight>();
-
-        flights.addAll(deltaFlights(destination.toUpperCase()));
-        flights.addAll(unitedFlights(destination.toUpperCase()));
-
+        flights.addAll(searchFlights(destination.toUpperCase()));
         return flights;
     }
 
     public static Flight getByCode(String code) {
-        if (code.startsWith('U')) {
-            return getUnitedByCode(code);
-        } else {
-            return getDeltaByCode(code);
-        }
-    }
+        return getFlightByCode(code);
+    }    
 
-    // REST service
-    @TestVisible
-    private static Flight getUnitedByCode(String code) {
-        Flight flight = new Flight();
-        flight.code = code;
-        flight.airlineName = 'United';
-
-        String endpoint = 'https://flight-finder-united.herokuapp.com/flights/' + code;
-        HttpRequest request = new HttpRequest();
-        request.setEndpoint(endpoint);
-        request.setMethod('GET');
-        HttpResponse response = new Http().send(request);
-
-        if(response.getStatusCode() == 200) {
-            Map<String, Object> flightMap = (Map<String, Object>)JSON.deserializeUntyped(response.getBody());
-            flight.flightNumber = (String)flightMap.get('flightNumber');
-            flight.destination = (String)flightMap.get('destination');
-            flight.origin = (String)flightMap.get('origin');
-            flight.departureDate = (String)flightMap.get('date');
-            flight.price = (Double)flightMap.get('amount');
-            flight.planeType = (String)flightMap.get('planeType');
-            flight.emptySeats = (Integer)flightMap.get('seatsAvailable');
-        }        
-
-        return flight;        
-    }
-
-    // REST service
-    @TestVisible
-    private static List<Flight> unitedFlights(String destination) {
+    private static List<Flight> searchFlights(String destination) {
         List<Flight> flights = new List<Flight>();
 
-        String endpoint = 'https://flight-finder-united.herokuapp.com/flights';
+        String endpoint = ENDPOINT;
         // add query parameter for searching by destination
         if (destination.length() == 3) {
             endpoint = endpoint + '?destination=' + destination;
@@ -60,63 +26,26 @@ public class FlightsService {
         HttpResponse response = new Http().send(request);
 
         if(response.getStatusCode() == 200) {
-            List<Object> flightObjects = (List<Object>)JSON.deserializeUntyped(response.getBody());
-            for(Object f : flightObjects) {
-                // each element is a map of keys
-                Map<String, Object> flightMap = (Map<String, Object>)f;
-                Flight flight = new Flight();
-                flight.code = (String)flightMap.get('code');
-                flight.airlineName = (String)flightMap.get('airlineName');
-                flight.flightNumber = (String)flightMap.get('flightNumber');
-                flight.destination = (String)flightMap.get('destination');
-                flight.origin = (String)flightMap.get('origin');
-                flight.departureDate = (String)flightMap.get('date');
-                flight.price = (Double)flightMap.get('amount');
-                flight.planeType = (String)flightMap.get('planeType');
-                flight.emptySeats = (Integer)flightMap.get('seatsAvailable');
-                // add flight to the collection
-                flights.add(flight);
-            }
+            flights = (List<Flight>)JSON.deserialize(response.getBody(), List<Flight>.class);
         }     
 
         return flights;
     }
 
-    // SOAP service
-    @TestVisible
-    private static Flight getDeltaByCode(String code) {
+    private static Flight getFlightByCode(String code) {
         Flight flight = new Flight();
+        flight.code = code;
 
-        for (Flight f : deltaFlights('')) {
-            if (code == f.code) {
-                flight = f;
-                break;
-            }
+        String endpoint = ENDPOINT + '/' + code;
+        HttpRequest request = new HttpRequest();
+        request.setEndpoint(endpoint);
+        request.setMethod('GET');
+        HttpResponse response = new Http().send(request);
+
+        if(response.getStatusCode() == 200) {
+            flight = (Flight)JSON.deserialize(response.getBody(), Flight.class);
         }
 
-        return flight;
+        return flight;        
     }
-    
-    // SOAP service
-    @TestVisible
-    private static List<Flight> deltaFlights(String destination) {
-        List<Flight> flights = new List<Flight>();
-
-        DeltaAirlinesService.TicketServicePort delta = new  DeltaAirlinesService.TicketServicePort();
-        DeltaAirlinesService.flight[] results;
-
-        if (destination == '') {
-            results = delta.listAllFlights();
-        } else if (destination.length() == 3) {
-            results = delta.findFlight(destination);
-        }
-
-        if (results != null) {
-            for (DeltaAirlinesService.Flight flight : results) {
-                flights.add(new Flight(flight));
-            }
-        }
-        
-        return flights;
-    }       
 }
