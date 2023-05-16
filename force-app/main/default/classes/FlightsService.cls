@@ -1,5 +1,7 @@
 public class FlightsService {
-    private static final String ENDPOINT = 'https://flight-finder-api-044ch3.5sc6y6-2.usa-e2.cloudhub.io/flights';
+
+    // FOR DEMO ONLY!! --- THIS SHOULD REALLY BE A NAMED CREDENTIAL
+    private static final String ENDPOINT = 'https://codelive-flight-finder-api-vsjt2z.5sc6y6-3.usa-e2.cloudhub.io/flights';
 
     public static List<Flight> search(String destination) {
         List<Flight> flights = new List<Flight>();
@@ -11,6 +13,7 @@ public class FlightsService {
         return getFlightByCode(code);
     }    
 
+    // PRIVATE METHODS
     private static List<Flight> searchFlights(String destination) {
         List<Flight> flights = new List<Flight>();
 
