@@ -1,8 +1,5 @@
 public class FlightsService {
 
-    // FOR DEMO ONLY!! --- THIS SHOULD REALLY BE A NAMED CREDENTIAL
-    private static final String ENDPOINT = 'https://codelive-flight-finder-api-vsjt2z.5sc6y6-3.usa-e2.cloudhub.io/flights';
-
     public static List<Flight> search(String destination) {
         List<Flight> flights = new List<Flight>();
         flights.addAll(searchFlights(destination.toUpperCase()));
@@ -17,14 +14,14 @@ public class FlightsService {
     private static List<Flight> searchFlights(String destination) {
         List<Flight> flights = new List<Flight>();
 
-        String endpoint = ENDPOINT;
+        String queryParam = '';
         // add query parameter for searching by destination
         if (destination.length() == 3) {
-            endpoint = endpoint + '?destination=' + destination;
+            queryParam = '?destination=' + destination;
         }
 
         HttpRequest request = new HttpRequest();
-        request.setEndpoint(endpoint);
+        request.setEndpoint('callout:Flight_Finder_API/flights' + queryParam);
         request.setMethod('GET');
         HttpResponse response = new Http().send(request);
 
@@ -39,9 +36,8 @@ public class FlightsService {
         Flight flight = new Flight();
         flight.code = code;
 
-        String endpoint = ENDPOINT + '/' + code;
         HttpRequest request = new HttpRequest();
-        request.setEndpoint(endpoint);
+        request.setEndpoint('callout:Flight_Finder_API/flights/' + code);
         request.setMethod('GET');
         HttpResponse response = new Http().send(request);
 
