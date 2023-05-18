@@ -1,4 +1,4 @@
-# Salesforce DX Project: Next Steps
+# Salesforce API Transformation to MuleSoft
 
 This is the code for the my 3 part series on [Salesforce Developers codeLive Youtube channel](https://www.youtube.com/@SalesforceDevs): Revamp & Power Up - Salesforce API Transformation to MuleSoft
 
