@@ -47,7 +47,7 @@ Agenda for Part #3:
 - Create a screen flow that allows users to look up a flight by code using an HTTP Callout action.
 
 
-# MuleSoft Anypont Platform
+# MuleSoft Anypoint Platform
 
 The API's implementation was built using Anypoint Studio. You can [download](https://github.com/jeffdonthemic/flight-finder-salesforce/blob/main/flight-finder-api-spec.zip) the jar for the project and import it into Anypoint Studio.
 
