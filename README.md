@@ -49,11 +49,11 @@ Agenda for Part #3:
 
 # MuleSoft Anypont Platform
 
-The API's implementation was built using Anypoint Studio. You can [download](https://github.com/jeffdonthemic/flight-finder-salesforce/blob/main/flight-finder-api-spec.zip) the API Specification with all assets.
+The API's implementation was built using Anypoint Studio. You can [download](https://github.com/jeffdonthemic/flight-finder-salesforce/blob/main/flight-finder-api-spec.zip) the jar for the project and import it into Anypoint Studio.
 
 ## API Specification
 
-You can [download](https://github.com/jeffdonthemic/flight-finder-salesforce/blob/main/codelive-flight-finder-api.jr) the jar for the project and import it into Anypoint Studio..
+You can [download](https://github.com/jeffdonthemic/flight-finder-salesforce/blob/main/codelive-flight-finder-api.jar) the API Specification with all assets.
 
 ```
 #%RAML 1.0
